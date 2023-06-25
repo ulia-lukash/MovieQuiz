@@ -29,6 +29,7 @@ final class MovieQuizViewController: UIViewController {
         super.viewDidLoad()
         
         // Почему-то не даёт скруглить углы через storyboard, поэтому вынесла кодом.
+        imageView.layer.cornerRadius = 20
         noButton.layer.cornerRadius = 15
         yesButton.layer.cornerRadius = 15
         show(quiz: convert(model: questions[0]))
@@ -42,6 +43,8 @@ final class MovieQuizViewController: UIViewController {
         } else {
             showAnswerResult(isCorrect: false)
         }
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
     }
     @IBAction private func noButtonClicked(_ sender: Any) {
         let usersAnswer = false
@@ -50,6 +53,8 @@ final class MovieQuizViewController: UIViewController {
         } else {
             showAnswerResult(isCorrect: false)
         }
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -70,7 +75,7 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor(named: "YP Green")?.cgColor : UIColor(named: "YP Red")?.cgColor
-        imageView.layer.cornerRadius = 15
+        imageView.layer.cornerRadius = 20
         
         if isCorrect {
             correctAnswers += 1
@@ -91,6 +96,8 @@ final class MovieQuizViewController: UIViewController {
             let nextQuestion = questions[currentQuestionIndex]
             let viewModel = convert(model: nextQuestion)
             show(quiz: viewModel)
+            yesButton.isEnabled = true
+            noButton.isEnabled = true
         }
     }
     
@@ -107,6 +114,8 @@ final class MovieQuizViewController: UIViewController {
             let firstQuestion = self.questions[self.currentQuestionIndex]
             let viewModel = self.convert(model: firstQuestion)
             self.show(quiz: viewModel)
+            self.yesButton.isEnabled = true
+            self.noButton.isEnabled = true
         }
 
         alert.addAction(action)
