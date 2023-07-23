@@ -11,15 +11,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate  
     @IBOutlet weak internal var noButton: UIButton!
     @IBOutlet weak internal var yesButton: UIButton!
     
-    internal var correctAnswers = 0
-    internal var currentQuestionIndex = 0
+    private var correctAnswers = 0
+    private var currentQuestionIndex = 0
     
-    internal let questionsAmount: Int = 10
-    internal var questionFactory: QuestionFactoryProtocol?
+    private let questionsAmount: Int = 10
+    private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenter?
     private var statisticService: StatisticService?
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,8 +31,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate  
         questionFactory = QuestionFactory(delegate: self)
         alertPresenter = AlertPresenter(delegate: self)
         questionFactory?.requestNextQuestion()
-        statisticService = StatisticServiceImplementation(delegate: self)
-
+        statisticService = StatisticServiceImplementation()
+        
     }
     // MARK: - QuestionFactoryDelegate
     func didReceiveNextQuestion(question: QuizQuestion?) {
@@ -43,7 +43,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate  
         currentQuestion = question
         let viewModel = convert(model: question)
         DispatchQueue.main.async { [weak self] in
-                self?.show(quiz: viewModel)
+            self?.show(quiz: viewModel)
         }
     }
     
@@ -79,7 +79,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate  
         imageView.layer.borderWidth = 0
     }
     
-
+    
     private func showAnswerResult(isCorrect: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
@@ -98,8 +98,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate  
     
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1 { // 1
-            
-        showAlert()
+            showAlert()
         } else {
             currentQuestionIndex += 1
             questionFactory?.requestNextQuestion()
@@ -133,21 +132,20 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate  
                 assertionFailure("error")
                 return ""
             }
-                let totalGamesPlayed = "Кол-во сыгранных игр: \(String(statisticService!.gamesCount))"
-                let currentGameResult = "Ваш результат: \(correctAnswers)/ \(questionsAmount)"
-                let bestGameInfo = "Рекорд: \(bestGame.correct) / \(bestGame.total)"
-                + "(\(bestGame.date.dateTimeString)"
-            let accuracy = String(round(statisticService!.totalAccuracy * 100) / 100)
-            let averageAccuracy = "Средняя точность: \(accuracy)%"
-                
-                let resultMessage = [
-                    currentGameResult, totalGamesPlayed, bestGameInfo, averageAccuracy].joined(separator: "\n")
-                return resultMessage
-
+            let totalGamesPlayed = "Кол-во сыгранных игр: \(String(service.gamesCount))"
+            let currentGameResult = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
+            let bestGameInfo = "Рекорд: \(bestGame.correct)/\(bestGame.total)"
+            + " (\(bestGame.date.dateTimeString))"
+            let averageAccuracy = "Средняя точность: \(String(format: "%.2f", service.totalAccuracy))%"
+            
+            let resultMessage = [
+                currentGameResult, totalGamesPlayed, bestGameInfo, averageAccuracy].joined(separator: "\n")
+            return resultMessage
+            
         }
     }
     
-   
+    
 }
 
 

@@ -20,11 +20,6 @@ final class StatisticServiceImplementation: StatisticService {
     private let userDefaults = UserDefaults.standard
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
-    var delegate: MovieQuizViewController
-    
-    init(delegate: MovieQuizViewController) {
-        self.delegate = delegate
-    }
     
     private enum Keys: String {
         case correct, total, bestGame, gamesCount
@@ -57,7 +52,7 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     var totalAccuracy: Double {
-        return correct / total
+        return (correct/total)*100
     }
     
     var bestGame: GameRecord? {
@@ -75,13 +70,12 @@ final class StatisticServiceImplementation: StatisticService {
     }
     
     func store(correct count: Int, total amount: Int) {
-        self.correct += correct
-        self.total += total
+        self.correct += Double(count)
+        self.total += Double(amount)
         self.gamesCount += 1
-        
         let currentGame = GameRecord(correct: count, total: amount, date: Date())
         if let previousBestGame = bestGame {
-            if currentGame > bestGame! {
+            if currentGame > previousBestGame {
                 bestGame = currentGame
             }
         } else {
