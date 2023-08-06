@@ -11,6 +11,7 @@ struct NetworkClient {
 
     private enum NetworkError: Error {
         case codeError
+        case unknownError
     }
     
     func fetch(url: URL, handler: @escaping (Result<Data, Error>) -> Void) {
@@ -28,7 +29,10 @@ struct NetworkClient {
                 return
             }
             
-            guard let data = data else { return }
+            guard let data = data else {
+                handler(.failure(NetworkError.unknownError))
+                return
+            }
             handler(.success(data))
         }
         
