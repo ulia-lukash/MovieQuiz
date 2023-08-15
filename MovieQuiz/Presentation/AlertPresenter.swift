@@ -26,6 +26,7 @@ class AlertPresenter {
             alertModel.completion()
             
         }
+        alert.view.accessibilityIdentifier = "Alert"
         alert.addAction(action)
         delegate?.present(alert, animated: true)
     }
