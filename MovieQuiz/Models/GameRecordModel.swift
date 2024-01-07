@@ -17,11 +17,4 @@ struct GameRecord: Codable {
         }
         return Double(correct) / Double(total)
     }
-    
-    static func > (lhs: GameRecord, rhs: GameRecord) -> Bool {
-        lhs.accuracy > lhs.accuracy
-    }
-    func compareResults(previousRecord: GameRecord) -> Bool {
-        return self.correct > previousRecord.correct ? true : false
-    }
 }
