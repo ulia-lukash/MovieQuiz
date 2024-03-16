@@ -5,7 +5,17 @@
 ## **WARNING**
 
 - IMDb API has changed, work is being done to update the app!
-  
-## **System requirements**
 
-- iOS 13 or higher
+## **Getting started**
+
+- Make sure you have Xcode installed.
+- In terminal:
+> git clone https://github.com/ulia-lukash/MovieQuiz.git
+- Create a new branch.
+- Open the .xcodeproj file in Xcode and do all the works on your created branch.
+- No additional steps necessary.
+  
+## **System**
+
+- iOS 13 or higher.
+- UI adapted for iPhone X or newer.
